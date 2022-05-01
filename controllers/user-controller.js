@@ -1,12 +1,9 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 
-<<<<<<< HEAD
-const { User, Comment, Restaurant } = db
-=======
 const { User, Comment, Restaurant, Favorite, Like, Followship } = db
->>>>>>> 649297a5716c96ac092b7fd35c346730fb46806c
 const { imgurFileHandler } = require('../helpers/file-helpers')
+const { getUser } = require('../helpers/auth-helpers')
 
 const userController = {
   signUpPage: (req, res) => {
@@ -44,7 +41,7 @@ const userController = {
     res.redirect('/signin')
   },
   getUser: (req, res, next) => {
-    // if (req.params.id.toString() !== req.user.id.toString()) throw new Error('User id error.')
+    if (req.params.id.toString() !== getUser(req).id.toString()) throw new Error('無權限')
     return Promise.all([
       User.findByPk(req.params.id),
       Comment.findAndCountAll({
@@ -52,22 +49,16 @@ const userController = {
         include: Restaurant
       })
     ]).then(([user, comments]) => {
-      if (!user) throw new Error("User doesn't exist!")
+      if (!user) throw new Error('無權限')
       return res.render('users/profile', {
         user: user.toJSON(),
         commentCounts: comments.count,
         restaurants: comments.rows.map(r => r.Restaurant.toJSON())
       })
     })
-    // return User.findByPk(req.params.id)
-    //   .then(user => {
-    //     if (!user) throw new Error("User doesn't exist!")
-    //     return res.render('users/profile', { user: user.toJSON() })
-    //   })
-    //   .catch(err => next(err))
   },
   editUser: (req, res, next) => {
-    // if (req.params.id.toString() !== req.user.id.toString()) throw new Error('User id error.')
+    if (req.params.id.toString() !== getUser(req).id.toString()) throw new Error('無權限')
     return User.findByPk(req.params.id)
       .then(user => {
         if (!user) throw new Error("User doesn't exist!")
@@ -76,7 +67,7 @@ const userController = {
       .catch(err => next(err))
   },
   putUser: (req, res, next) => {
-    // if (req.params.id.toString() !== req.user.id.toString()) throw new Error('User id error.')
+    if (req.params.id.toString() !== getUser(req).id.toString()) throw new Error('User id error.')
     const { name } = req.body
     if (!name) throw new Error('Username is required.')
     const { file } = req
@@ -96,8 +87,6 @@ const userController = {
         res.redirect(`/users/${req.params.id}`)
       })
       .catch(err => next(err))
-<<<<<<< HEAD
-=======
   },
   addFavorite: (req, res, next) => {
     const { restaurantId } = req.params
@@ -223,7 +212,6 @@ const userController = {
       return followship.destroy()
     }).then(() => res.redirect('back'))
       .catch(err => next(err))
->>>>>>> 649297a5716c96ac092b7fd35c346730fb46806c
   }
 }
 

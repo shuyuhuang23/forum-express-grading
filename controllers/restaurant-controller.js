@@ -107,22 +107,6 @@ const restaurantController = {
         nest: true
       })
     ])
-<<<<<<< HEAD
-      .then(([restaurant, comments]) => {
-        if (!restaurant) throw new Error('The restaurant does not exit.')
-        res.render('dashboard', { restaurant, commentCounts: comments.count })
-      })
-    // return Restaurant.findByPk(req.params.id, {
-    //   raw: true,
-    //   nest: true,
-    //   include: [Category]
-    // })
-    //   .then(restaurant => {
-    //     if (!restaurant) throw new Error('The restaurant does not exit.')
-    //     res.render('dashboard', { restaurant })
-    //   })
-    //   .catch(err => next(err))
-=======
       .then(([restaurants, comments]) => {
         return res.render('feeds', {
           restaurants,
@@ -146,7 +130,6 @@ const restaurantController = {
           .slice(0, TOP_N)
         res.render('top-restaurants', { restaurants: result })
       })
->>>>>>> 649297a5716c96ac092b7fd35c346730fb46806c
   }
 }
 

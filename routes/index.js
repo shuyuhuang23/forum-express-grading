@@ -33,13 +33,6 @@ router.get('/restaurants', authenticated, restController.getRestaurants)
 router.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
 router.post('/comments', authenticated, commentController.postComment)
 
-<<<<<<< HEAD
-router.get('/users/:id', authenticated, userController.getUser)
-router.get('/users/:id/edit', authenticated, userController.editUser)
-router.put('/users/:id', authenticated, upload.single('image'), userController.putUser)
-
-router.use('/', (req, res) => res.redirect('/restaurants'))
-=======
 router.post('/favorite/:restaurantId', authenticated, userController.addFavorite)
 router.delete('/favorite/:restaurantId', authenticated, userController.removeFavorite)
 
@@ -53,7 +46,6 @@ router.put('/users/:id', authenticated, upload.single('image'), userController.p
 
 router.post('/following/:userId', authenticated, userController.addFollowing)
 router.delete('/following/:userId', authenticated, userController.removeFollowing)
->>>>>>> 649297a5716c96ac092b7fd35c346730fb46806c
 
 router.get('/', (req, res) => res.redirect('/restaurants'))
 router.use('/', generalErrorHandler)
